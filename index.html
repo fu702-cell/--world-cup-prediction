@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026世界杯数智预测平台 | World Cup Quant Predictor</title>
+  <!-- Google Fonts: Inter for text, Orbitron for stats & numbers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Global Neon Background elements -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Main Container -->
+  <div class="app-container">
+    <!-- Header -->
+    <header class="main-header glass-card">
+      <div class="header-logo">
+        <img src="world_cup_logo.png" alt="Logo" class="logo-img">
+        <div class="logo-text">
+          <h1>世界杯数智预测平台</h1>
+          <span class="sub-title">QUANT WORLD CUP PREDICTOR 2026</span>
+        </div>
+      </div>
+      
+      <!-- Navigation -->
+      <nav class="main-nav">
+        <button class="nav-btn active" data-tab="tab-predictor">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          单场预测
+        </button>
+        <button class="nav-btn" data-tab="tab-simulator">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="9" y1="3" x2="9" y2="21"></line>
+            <line x1="15" y1="3" x2="15" y2="21"></line>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="3" y1="15" x2="21" y2="15"></line>
+          </svg>
+          48队模拟器
+        </button>
+        <button class="nav-btn" data-tab="tab-database">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          球队数据库
+        </button>
+        <button class="nav-btn" data-tab="tab-math">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          数学模型说明
+        </button>
+      </nav>
+    </header>
+
+    <!-- Content Sections -->
+    <main class="main-content">
+      
+      <!-- TAB 1: MATCH PREDICTOR -->
+      <section id="tab-predictor" class="tab-content active">
+        <div class="grid-layout match-grid">
+          
+          <!-- Control Panel (Left Card) -->
+          <div class="glass-card panel-left animate-slide-in">
+            <h2 class="section-title">对阵双方 & 量化因子配置</h2>
+            
+            <div class="vs-setup">
+              <!-- Team A Selection -->
+              <div class="team-select-box">
+                <label for="home-team-select">主队 / Team A</label>
+                <select id="home-team-select" class="custom-select"></select>
+                <div class="team-badge" id="home-badge">🇨🇳</div>
+                <div class="rating-display">
+                  <span class="label">基准 Elo:</span>
+                  <span id="home-base-elo" class="value">1800</span>
+                </div>
+                <div class="rating-display accent-cyan">
+                  <span class="label">调整后 Elo:</span>
+                  <span id="home-adj-elo" class="value font-orbitron">1880</span>
+                </div>
+              </div>
+
+              <div class="vs-badge font-orbitron">VS</div>
+
+              <!-- Team B Selection -->
+              <div class="team-select-box">
+                <label for="away-team-select">客队 / Team B</label>
+                <select id="away-team-select" class="custom-select"></select>
+                <div class="team-badge" id="away-badge">🇫🇷</div>
+                <div class="rating-display">
+                  <span class="label">基准 Elo:</span>
+                  <span id="away-base-elo" class="value">2100</span>
+                </div>
+                <div class="rating-display accent-pink">
+                  <span class="label">调整后 Elo:</span>
+                  <span id="away-adj-elo" class="value font-orbitron">2050</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ground & Host Factor -->
+            <div class="factor-group">
+              <h3>🏟️ 场地与环境因子</h3>
+              <div class="radio-toggle-container">
+                <label class="radio-label">
+                  <input type="radio" name="match-location" value="neutral" checked>
+                  <span>中立场地</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="match-location" value="home-host">
+                  <span>主队为东道主 (+80 Elo)</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="match-location" value="away-host">
+                  <span>客队为东道主 (+80 Elo)</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="match-location" value="home-continent">
+                  <span>主队大洲优势 (+30 Elo)</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="match-location" value="away-continent">
+                  <span>客队大洲优势 (+30 Elo)</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Team A Star Players -->
+            <div class="factor-group">
+              <h3>⭐ 主队关键球员状态</h3>
+              <div class="players-status-list" id="home-players-list">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Team B Star Players -->
+            <div class="factor-group">
+              <h3>⭐ 客队关键球员状态</h3>
+              <div class="players-status-list" id="away-players-list">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Predictions & Mathematical Outputs (Right Card) -->
+          <div class="glass-card panel-right animate-slide-in">
+            <h2 class="section-title">量化模型预测结果</h2>
+
+            <!-- Expected Goals Display -->
+            <div class="xg-display">
+              <div class="xg-box xg-home">
+                <span class="xg-title">主队进球期望 (λ_A)</span>
+                <span class="xg-value font-orbitron" id="xg-home-val">1.35</span>
+              </div>
+              <div class="xg-divider"></div>
+              <div class="xg-box xg-away">
+                <span class="xg-title">客队进球期望 (λ_B)</span>
+                <span class="xg-value font-orbitron" id="xg-away-val">1.35</span>
+              </div>
+            </div>
+
+            <!-- Probability Bar -->
+            <div class="prob-section">
+              <h3>📊 比赛胜平负概率 (1X2 Probabilities)</h3>
+              <div class="prob-bar-container">
+                <div class="prob-segment prob-home" style="width: 38%"><span class="val font-orbitron">38.2%</span><span class="txt">主胜 (3)</span></div>
+                <div class="prob-segment prob-draw" style="width: 26%"><span class="val font-orbitron">26.1%</span><span class="txt">平局 (X)</span></div>
+                <div class="prob-segment prob-away" style="width: 36%"><span class="val font-orbitron">35.7%</span><span class="txt">客胜 (0)</span></div>
+              </div>
+            </div>
+
+            <!-- Goal statistics (Under/Over, BTTS) -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <span class="stat-title">小球 (< 2.5 进球)</span>
+                <span class="stat-value font-orbitron" id="prob-under-val">52.3%</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-title">大球 (> 2.5 进球)</span>
+                <span class="stat-value font-orbitron" id="prob-over-val">47.7%</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-title">双方建功 (BTTS)</span>
+                <span class="stat-value font-orbitron" id="prob-btts-val">58.4%</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-title">最可能比分</span>
+                <span class="stat-value font-orbitron accent-gold" id="prob-exact-val">1 - 1 (13.5%)</span>
+              </div>
+            </div>
+
+            <!-- Handicap & Odds Kelly Panel -->
+            <div class="betting-calibration factor-group">
+              <h3>💰 盘口赔率校准与凯利公式价值过滤</h3>
+              <div class="betting-inputs">
+                <div class="input-field">
+                  <label for="odds-home">主胜赔率 (Home)</label>
+                  <input type="number" step="0.01" id="odds-home" placeholder="1.95" class="custom-input" value="2.35">
+                </div>
+                <div class="input-field">
+                  <label for="odds-draw">平局赔率 (Draw)</label>
+                  <input type="number" step="0.01" id="odds-draw" placeholder="3.20" class="custom-input" value="3.10">
+                </div>
+                <div class="input-field">
+                  <label for="odds-away">客胜赔率 (Away)</label>
+                  <input type="number" step="0.01" id="odds-away" placeholder="2.80" class="custom-input" value="3.30">
+                </div>
+              </div>
+              
+              <div class="handicap-setup">
+                <div class="input-field select-field">
+                  <label for="handicap-select">亚洲盘口 (Handicap A vs B)</label>
+                  <select id="handicap-select" class="custom-select">
+                    <option value="1.5">主队 +1.5</option>
+                    <option value="1.25">主队 +1.25</option>
+                    <option value="1">主队 +1.0</option>
+                    <option value="0.75">主队 +0.75</option>
+                    <option value="0.5">主队 +0.5 (即受让半球)</option>
+                    <option value="0.25">主队 +0.25</option>
+                    <option value="0" selected>主队 0 (即平手盘)</option>
+                    <option value="-0.25">主队 -0.25</option>
+                    <option value="-0.5">主队 -0.5 (即让半球)</option>
+                    <option value="-0.75">主队 -0.75</option>
+                    <option value="-1">主队 -1.0</option>
+                    <option value="-1.25">主队 -1.25</option>
+                    <option value="-1.5">主队 -1.5</option>
+                  </select>
+                </div>
+                <div class="input-field">
+                  <label for="odds-handicap">盘口赔率 (Handicap Odds)</label>
+                  <input type="number" step="0.01" id="odds-handicap" class="custom-input" value="1.95">
+                </div>
+              </div>
+
+              <!-- Output Kelly recommendation -->
+              <div class="kelly-results" id="kelly-panel">
+                <!-- Dynamically updated -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Poisson Score Matrix Heatmap (Full Width) -->
+        <div class="glass-card poisson-card animate-slide-in">
+          <h2 class="section-title">泊松分布联合进球概率矩阵 (Joint Scoreline Probabilities)</h2>
+          <p class="section-desc">横轴为客队进球数，纵轴为主队进球数。单元格颜色越亮，代表该比分出现概率越高。点击单元格可查看详细预测。</p>
+          <div class="heatmap-container">
+            <table class="poisson-table" id="poisson-heatmap">
+              <!-- Dynamically populated -->
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: TOURNAMENT SIMULATOR -->
+      <section id="tab-simulator" class="tab-content">
+        <div class="simulator-controls glass-card animate-slide-in">
+          <div class="sim-headline">
+            <h2>🏆 2026世界杯 48支球队全流程模拟器</h2>
+            <p>基于 12 个小组 (A-L)，采用 2026 官方规则：前二名晋级，加上 8 个成绩最好的小组第三，进行 32 强淘汰赛。</p>
+          </div>
+          <div class="sim-actions">
+            <button id="btn-run-once" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              单次推演 (含动画)
+            </button>
+            <button id="btn-run-montecarlo" class="btn btn-accent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              万次蒙特卡洛预测
+            </button>
+            <button id="btn-reset-sim" class="btn btn-secondary">重置模拟</button>
+          </div>
+        </div>
+
+        <!-- Monte Carlo Progress Banner -->
+        <div class="monte-carlo-progress-banner glass-card" id="mc-progress-box" style="display: none;">
+          <div class="mc-progress-label">正在进行蒙特卡洛多线程推演... <span id="mc-progress-percent">0%</span></div>
+          <div class="mc-progress-bar-container">
+            <div class="mc-progress-bar" id="mc-progress-bar-fill"></div>
+          </div>
+        </div>
+
+        <!-- Simulator Subtabs Navigation -->
+        <div class="sim-subnav glass-card animate-slide-in">
+          <button class="subnav-btn active" data-subtab="subtab-groups">小组赛积分榜 (12个小组)</button>
+          <button class="subnav-btn" data-subtab="subtab-third">小组第三PK榜</button>
+          <button class="subnav-btn" data-subtab="subtab-knockouts">淘汰赛对阵图 (R32 - 决赛)</button>
+          <button class="subnav-btn" data-subtab="subtab-leaderboard">夺冠概率天梯图 (Monte Carlo)</button>
+        </div>
+
+        <!-- Subtab 1: Group Tables -->
+        <div id="subtab-groups" class="subtab-content active">
+          <div class="groups-grid" id="groups-container">
+            <!-- Dynamically populated with 12 group tables -->
+          </div>
+        </div>
+
+        <!-- Subtab 2: Third-Place Comparison -->
+        <div id="subtab-third" class="subtab-content">
+          <div class="glass-card table-card animate-slide-in">
+            <h2 class="sub-section-title">成绩最好的小组第三名排行 (12 选 8)</h2>
+            <p class="section-desc">根据规则，12个小组第三名中积分最高、净胜球最多、进球数最多者排名前 8 晋级 32 强。绿底行代表当前出线球队。</p>
+            <div class="responsive-table">
+              <table class="data-table" id="third-places-table">
+                <thead>
+                  <tr>
+                    <th>排名</th>
+                    <th>小组</th>
+                    <th>球队</th>
+                    <th>积分 (Pts)</th>
+                    <th>净胜球 (GD)</th>
+                    <th>总进球 (GF)</th>
+                    <th>胜-平-负</th>
+                    <th>基准 Elo</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+                <tbody id="third-places-tbody">
+                  <!-- Dynamically populated -->
+                  <tr><td colspan="9" style="text-align: center; color: var(--text-secondary);">尚未开始模拟，请点击上方“单次推演”或“蒙特卡洛预测”</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtab 3: Knockout Bracket -->
+        <div id="subtab-knockouts" class="subtab-content">
+          <div class="bracket-wrapper" id="bracket-container">
+            <!-- Dynamically populated or styled knockout tree -->
+            <div class="bracket-empty-message">
+              <h3>🏆 淘汰赛对阵图</h3>
+              <p>请点击上方的“单次推演”按钮以观察淘汰赛晋级树状图。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtab 4: Monte Carlo Leaderboard -->
+        <div id="subtab-leaderboard" class="subtab-content">
+          <div class="glass-card table-card animate-slide-in">
+            <h2 class="sub-section-title">球队各阶段达成概率预测 (基于蒙特卡洛推演)</h2>
+            <p class="section-desc">此表展示了进行成千上万次全模拟后，各队达成相应目标的频率。点击表头可进行排序。</p>
+            <div class="responsive-table">
+              <table class="data-table leaderboard-table" id="leaderboard-table">
+                <thead>
+                  <tr>
+                    <th>排名</th>
+                    <th>球队</th>
+                    <th>基准 Elo</th>
+                    <th>大洲</th>
+                    <th data-sort="r32">出线率 (R32+)</th>
+                    <th data-sort="r16">16强率</th>
+                    <th data-sort="qf">8强率</th>
+                    <th data-sort="sf">4强率</th>
+                    <th data-sort="final">决赛率</th>
+                    <th data-sort="winner" class="sort-active">夺冠率 (Champion) 🏆</th>
+                  </tr>
+                </thead>
+                <tbody id="leaderboard-tbody">
+                  <!-- Dynamically populated -->
+                  <tr><td colspan="10" style="text-align: center; color: var(--text-secondary);">请运行“万次蒙特卡洛预测”以获取精准统计数据</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: TEAM DATABASE -->
+      <section id="tab-database" class="tab-content">
+        <div class="filter-bar glass-card animate-slide-in">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="team-search-input" placeholder="搜索球队或球员...">
+          </div>
+          <div class="filter-options">
+            <select id="filter-continent" class="custom-select select-sm">
+              <option value="all">所有大洲 (All Continents)</option>
+              <option value="Europe">欧洲 (Europe)</option>
+              <option value="South America">南美洲 (South America)</option>
+              <option value="North America">北美洲 (North America)</option>
+              <option value="Africa">非洲 (Africa)</option>
+              <option value="Asia">亚洲 (Asia)</option>
+              <option value="Oceania">大洋洲 (Oceania)</option>
+            </select>
+            <select id="filter-group" class="custom-select select-sm">
+              <option value="all">所有小组 (All Groups)</option>
+              <option value="A">小组 A</option>
+              <option value="B">小组 B</option>
+              <option value="C">小组 C</option>
+              <option value="D">小组 D</option>
+              <option value="E">小组 E</option>
+              <option value="F">小组 F</option>
+              <option value="G">小组 G</option>
+              <option value="H">小组 H</option>
+              <option value="I">小组 I</option>
+              <option value="J">小组 J</option>
+              <option value="K">小组 K</option>
+              <option value="L">小组 L</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="teams-flex-grid" id="teams-database-container">
+          <!-- Dynamically populated with 48 team cards -->
+        </div>
+      </section>
+
+      <!-- TAB 4: MATHEMATICAL HUB -->
+      <section id="tab-math" class="tab-content">
+        <div class="glass-card math-hub animate-slide-in">
+          <h2 class="section-title">量化模型底层算法与数学公式说明</h2>
+          
+          <div class="math-block">
+            <h3>1. 球队评级：Elo 评分与实力校准 (Elo Rating System)</h3>
+            <p>每一支球队都有一个代表其历史实力基准的 Elo 值。当两队相遇时，我们根据其 Elo 的差值，计算出比赛的理论胜负期望 $W_e$。计算公式采用 Logistic 概率分布：</p>
+            <div class="equation">
+              $$W_e(A) = \frac{1}{10^{-\frac{R_A - R_B}{400}} + 1}$$
+            </div>
+            <p>其中，$R_A$ 和 $R_B$ 分别代表主队和客队在结合了**主场因素**、**伤病因素**后的实时调整 Elo rating。</p>
+            <ul>
+              <li><strong>东道主优势：</strong>东道主球队的实时 Elo 评分将获得 $+80$ 点的安全边界调整，模拟本土作战的地理、气候以及主场观众心理暗示带来的竞技状态加成。</li>
+              <li><strong>同大洲优势：</strong>若球队在自己大洲（如北美洲的美国、加拿大、墨西哥）参加非主场战役，将获得 $+30$ 点的熟悉性加成。</li>
+              <li><strong>关键球员调整：</strong>每队设有 1 至 5 星级核心主力。若该球员伤停 (Injured/Suspended)，球队 Elo 对应扣减 $stars \times 16$ 分（五星超级球星缺失折合 $-80$ Elo），以此量化顶级球员对全队体系的支柱性影响；若处于巅峰状态 (Peak)，则对应增加 $stars \times 6$ 评分。</li>
+            </ul>
+          </div>
+
+          <div class="math-block">
+            <h3>2. 进球期望转化与独立泊松分布 (Poisson Goals Distribution)</h3>
+            <p>在足球量化中，用胜负概率直接推导比分十分困难，因此我们采用业界通用的**泊松分布**模型对两队的进球数分别进行独立随机过程建模：</p>
+            <div class="equation">
+              $$X \sim \text{Poisson}(\lambda_A), \quad Y \sim \text{Poisson}(\lambda_B)$$
+            </div>
+            <p>根据泊松分布概率质量函数 (PMF)，主队攻入 $k$ 个球的概率为：</p>
+            <div class="equation">
+              $$P(X = k) = \frac{\lambda_A^k \cdot e^{-\lambda_A}}{k!}$$
+            </div>
+            <p>而两队具体的进球期望值 $\lambda_A$ 和 $\lambda_B$ 则通过双方 adjusted Elo 的差距进行指数对数缩放：</p>
+            <div class="equation">
+              $$\lambda_A = \text{Base Goals} \times 10^{\frac{R_A - R_B}{850}}$$
+              $$\lambda_B = \text{Base Goals} \times 10^{\frac{R_B - R_A}{850}}$$
+            </div>
+            <p>这里，$\text{Base Goals}$ 设为 $1.35$（代表每场平均进球 $2.7$ 个），而除数 $850$ 是针对世界杯历届平均净胜球标准差拟合出的系数。该数学映射确保了如果两队实力完全均等，各队进球期望均为 1.35，若主队比客队高出 250 点 Elo，主队进球期望将飙升至约 2.66，而客队将萎缩至约 0.68。</p>
+          </div>
+
+          <div class="math-block">
+            <h3>3. 泊松联合分布矩阵 (Joint Probability Matrix)</h3>
+            <p>假设两队进球过程相互独立，那么具体比分 $(h, a)$ 出现的联合概率即为主客队各自泊松概率的乘积：</p>
+            <div class="equation">
+              $$P(X=h, Y=a) = P(X=h) \times P(Y=a) = \frac{\lambda_A^h e^{-\lambda_A}}{h!} \times \frac{\lambda_B^a e^{-\lambda_B}}{a!}$$
+            </div>
+            <p>通过构建一个 $10 \times 10$ 的比分矩阵，我们可以通过累加特定区间单元格的概率，计算出所有衍生玩法的概率：</p>
+            <ul>
+              <li><strong>主胜率：</strong> 累加所有 $h > a$ 的单元格概率。</li>
+              <li><strong>平局率：</strong> 累加所有 $h = a$ 的单元格概率。</li>
+              <li><strong>大球率 (> 2.5)：</strong> 累加所有 $h + a \ge 3$ 的单元格概率。</li>
+              <li><strong>双方均进球率 (BTTS)：</strong> $(1 - P(X=0)) \times (1 - P(Y=0))$。</li>
+            </ul>
+          </div>
+
+          <div class="math-block">
+            <h3>4. 盘口赔率校准与凯利公式 (Odds Calibration & Kelly Criterion)</h3>
+            <p>对于投注和预测而言，仅仅估算概率是不够的，还需要将模型概率与市场赔率进行校准：</p>
+            <ol>
+              <li>
+                <strong>市场无抽水概率计算：</strong> 设庄家开出的 Decimal 赔率为 $O_H, O_D, O_A$，其隐含的抽水（Overround）为：
+                <div class="equation">
+                  $$Margin = \frac{1}{O_H} + \frac{1}{O_D} + \frac{1}{O_A} - 1$$
+                </div>
+                剔除抽水后的市场公允概率为：$P_{fair} = \frac{1/O}{1 + Margin}$。
+              </li>
+              <li>
+                <strong>凯利公式价值过滤：</strong> 凯利公式用于寻找数学期望为正的“价值投注”，并计算最佳资金配比 $f^*$。
+                <div class="equation">
+                  $$f^* = \frac{P_{model} \times Odds - 1}{Odds - 1}$$
+                </div>
+                若计算出的 $f^* > 0$，说明存在正向 Edge（模型概率高于市场隐含概率），属于有价值的下注选择。为了防范模型误差和资金波动，本系统采用<strong>四分之一凯利（Quarter Kelly）</strong>策略，并对推荐仓位设置了 $15\%$ 的硬性上限。
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer glass-card">
+      <p>© 2026 世界杯数智量化预测平台 - 基于泊松分布与 Elo 体系的蒙特卡洛预测引擎</p>
+      <p class="disclaimer">本平台仅作足球数学模型研究与学习交流，不构成任何投注建议。</p>
+    </footer>
+  </div>
+
+  <!-- Player Status Modal / Editor -->
+  <div class="modal-overlay" id="team-modal" style="display: none;">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h2 id="modal-team-name">巴西 (Brazil)</h2>
+        <button class="modal-close" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="input-field">
+          <label for="modal-team-elo">修改基准 Elo 评分</label>
+          <input type="number" id="modal-team-elo" class="custom-input">
+        </div>
+        
+        <h3>球员状态调节</h3>
+        <div class="modal-players-list" id="modal-players-list">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-modal">取消</button>
+        <button class="btn btn-primary" id="btn-save-modal">保存修改</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Scripts -->
+  <script src="data.js"></script>
+  <script src="math.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
